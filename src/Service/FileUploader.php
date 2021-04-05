@@ -9,7 +9,9 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class FileUploader
 {
     private SluggerInterface $slugger;
+
     private string $uploadsDirectory;
+
     public function __construct(SluggerInterface $slugger, string $uploadsDirectory)
     {
         $this->slugger = $slugger;
@@ -19,7 +21,7 @@ class FileUploader
     /**
      * upload a file and return it's filename and filepath
      *
-     * @param UploadedFile $file The uplaod file.
+     * @param UploadedFile $file The upload file.
      * @return array{fileName: string, filePath: string}
      */
     public function upload(UploadedFile $file): array
