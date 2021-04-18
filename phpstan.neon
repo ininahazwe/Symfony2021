@@ -5,10 +5,27 @@ parameters:
     # excludes_analyse:
         # - src/DataFixture
     ignoreErrors:
-        - '|Call to an undefined method object::setArticle\(\).|'
-        - '|Parameter #1 \$author of method App\\Entity\\Article::setAuthor\(\) expects App\\Entity\\Author, object given.|'
-        - '|Parameter #1 \$category of method App\\Entity\\Article::addCategory\(\) expects App\\Entity\\Category, object given.|'
-        - '|Parameter #1 \$pictures of method App\\Entity\\Article::setPicture\(\) expects App\\Entity\\Picture, object given.|'
-        - '|Call to an undefined method Faker\\Generator::email\(\).|'
+        -
+            message: '|Call to an undefined method object::setArticle\(\).|'
+            path: src\DataFixtures\ArticleFixtures.php
+        -
+            message: '|Parameter #1 \$author of method App\\Entity\\Article::setAuthor\(\) expects App\\Entity\\Author|null, object given.|'
+            path: src\DataFixtures\ArticleFixtures.php
+        -
+            message: '|Parameter #1 \$category of method App\\Entity\\Article::addCategory\(\) expects App\\Entity\\Category, object given.|'
+            path: src\DataFixtures\ArticleFixtures.php
+        -
+            message: '|Parameter #1 \$picture of method App\\Entity\\Article::setPicture\(\) expects App\\Entity\\Picture, object given.|'
+            path: src\DataFixtures\ArticleFixtures.php
+        -
+            message: '|Call to an undefined method Faker\\Generator::email\(\).|'
+            path: src\DataFixtures\UserFixtures.php
+        -
+            message: '~Parameter #1 \$author of method App\\Entity\\User::setAuthor\(\) expects App\\Entity\\Author\|null, object given.~'
+            path: src\DataFixtures\UserFixtures.php
+        -
+            message: '~Parameter #2 \$callback of function array_filter expects callable\(mixed, mixed\): bool, Closure\(mixed\): string\|false given.~'
+            path: src\Controller\UserAccountAreaController.php
+
     checkGenericClassInNonGenericObjectType: false
     checkMissingIterableValueType: false

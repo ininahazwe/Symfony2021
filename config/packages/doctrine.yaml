@@ -1,5 +1,6 @@
 doctrine:
     dbal:
+        schema_filter: ~^(?!rememberme_token)~
         override_url: true
         url: '%env(resolve:DATABASE_URL)%'
 
