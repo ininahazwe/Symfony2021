@@ -17,18 +17,19 @@ class RepeatedPasswordType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'type'              =>PasswordType::class,
-            'invalid_message'   => "Passwords are different ",
-            'required'          => true,
-            'first_options'     => [
-                'label'         => "Password",
-                'label_attr'    => [
-                    'title'     => 'For security reasons, your password must contains...',
+            'type'                  =>PasswordType::class,
+            'invalid_message'       => "Passwords are different ",
+            'required'              => true,
+            'first_options'         => [
+                'label'             => "Password",
+                'label_attr'        => [
+                    'title'         => 'For security reasons, your password must contains...',
                 ],
-                'attr'          => [
-                    'pattern'   => "^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ý])(?=.*[0-9])(?=.*[^a-zà-ÿA-ZÀ-Ý0-9]).{12,}$",
-                    'title'     => "For security reasons, your password must contains",
-                    'maxlength' => 255
+                'attr'              => [
+                    'pattern'       => "^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ý])(?=.*[0-9])(?=.*[^a-zà-ÿA-ZÀ-Ý0-9]).{12,}$",
+                    'title'         => "For security reasons, your password must contains",
+                    'maxlength'     => 255,
+                    'class'         => 'text-center'
                 ]
             ],
             'second_options'        => [
@@ -39,7 +40,8 @@ class RepeatedPasswordType extends AbstractType
                 'attr'              => [
                     'pattern'       => "^(?=.*[a-zà-ÿ])(?=.*[A-ZÀ-Ý])(?=.*[0-9])(?=.*[^a-zà-ÿA-ZÀ-Ý0-9]).{12,}$",
                     'title'         => "Confirm  password",
-                    'maxlength'     => 255
+                    'maxlength'     => 255,
+                    'class'         => 'text-center'
                 ]
             ],
         ]);

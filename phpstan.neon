@@ -10,9 +10,6 @@ parameters:
             message: '|Call to an undefined method object::setArticle\(\).|'
             path: src\DataFixtures\ArticleFixtures.php
         -
-            message: '|Parameter #1 \$author of method App\\Entity\\Article::setAuthor\(\) expects App\\Entity\\Author|null, object given.|'
-            path: src\DataFixtures\ArticleFixtures.php
-        -
             message: '|Parameter #1 \$category of method App\\Entity\\Article::addCategory\(\) expects App\\Entity\\Category, object given.|'
             path: src\DataFixtures\ArticleFixtures.php
         -
@@ -29,4 +26,3 @@ parameters:
             path: src\Controller\UserAccountAreaController.php
 
     checkGenericClassInNonGenericObjectType: false
-    checkMissingIterableValueType: false

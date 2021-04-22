@@ -2,18 +2,33 @@
 
 namespace App\EventSubscriber;
 
+use App\Utils\LogoutUserTrait;
 use App\Event\AskForPasswordConfirmationEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class AskForPasswordConfirmationSubscriber implements EventSubscriberInterface
 {
-    private UrlGeneratorInterface $urlGenerator;
+    use LogoutUserTrait;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    private RequestStack $requestStack;
+
+    private Session $session;
+
+    private TokenStorageInterface $tokenStorage;
+
+    public function __construct(
+        RequestStack $requestStack,
+        Session $session,
+        TokenStorageInterface $tokenStorage
+    )
     {
-        $this->urlGenerator = $urlGenerator;
+        $this->requestStack = $requestStack;
+        $this->session = $session;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -40,26 +55,34 @@ class AskForPasswordConfirmationSubscriber implements EventSubscriberInterface
 
     public function onSessionInvalidate(AskForPasswordConfirmationEvents $events):void
     {
-        $loginRoute = $this->urlGenerator->generate('app_login');
-        $this->sendJsonResponse($loginRoute);
+        $this->sendJsonResponse(true);
     }
 
-    public function sendJsonResponse(?string $loginRoute = null): void
+    public function sendJsonResponse(bool $isUserDeauthenticated = false): void
     {
-        $data = [
-            'is_password_confirmed' => false,
-            'status_code'           => 200
-        ];
+        if($isUserDeauthenticated){
+            $request = $this->requestStack->getCurrentRequest();
 
-        $status = 200;
+            if(!$request){
+                return;
+            }
+            $response = $this->logoutUser(
+                $request,
+                $this->session,
+                $this->tokenStorage,
+                'danger',
+                'Vous avez été déconnecté par mesure de sécurité car 3 mots de passes invalides ont été saisis lors de la confirmation du mot de passe.',
+                false,
+                true
+            );
+            $response->send();
 
-        if($loginRoute) {
-            $data['login_route'] = $loginRoute;
-            $data['status_code'] = 302;
-            $status = 302;
+            exit();
         }
 
-        $response = new JsonResponse($data, $status);
+        $response = new JsonResponse([
+            'is_password_confirmed' => false
+        ]);
 
         $response->send();
 

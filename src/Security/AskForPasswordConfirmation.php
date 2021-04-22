@@ -8,7 +8,7 @@ use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
@@ -18,11 +18,7 @@ class AskForPasswordConfirmation
     private EventDispatcherInterface $eventDispatcher;
     private RequestStack $requestStack;
     private Security $security;
-
-    /**
-     * @var Session<mixed>
-     */
-    private Session $session;
+    private SessionInterface $session;
     private UserPasswordEncoderInterface $encoder;
 
     /**
@@ -30,14 +26,14 @@ class AskForPasswordConfirmation
      * @param EventDispatcherInterface $eventDispatcher
      * @param RequestStack $requestStack
      * @param Security $security
-     * @param Session<mixed> $session
+     * @param SessionInterface $session
      * @param UserPasswordEncoderInterface $encoder
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         RequestStack $requestStack,
         Security $security,
-        Session $session,
+        SessionInterface $session,
         UserPasswordEncoderInterface $encoder
     )
     {
@@ -123,10 +119,6 @@ class AskForPasswordConfirmation
             $this->session->set('Password-Confirmation-Invalid', $this->session->get('Password-Confirmation-Invalid') + 1);
 
             if($this->session->get('Password-Confirmation-Invalid') === 3) {
-                $this->session->invalidate();
-
-                $this->session->getFlashBag()->add('danger', 'Vous avez été deconnecté par mesure de sécurité car 3 mots de passe invalides ont été saisis lors de la confirmation du mot de passe.');
-
                 $this->eventDispatcher->dispatch(new AskForPasswordConfirmationEvents, AskForPasswordConfirmationEvents::SESSION_INVALIDATE);
             }
         }

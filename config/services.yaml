@@ -39,6 +39,10 @@ services:
             $senderEmail: '%app.sender_email%'
             $senderName: '%app.sender_name%'
 
-    App\Security\AskForPasswordConfirmation:
+    App\Controller\UserAccountAreaController:
+        arguments:
+            $session: '@session'
+
+    App\EventSubscriber\AskForPasswordConfirmationSubscriber:
         arguments:
             $session: '@session'
